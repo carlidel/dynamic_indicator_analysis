@@ -72,7 +72,7 @@ for i in range(max_turns):
     x_data[i] = x.reshape((side_cond, side_cond))
     px_data[i] = px.reshape((side_cond, side_cond))
     y_data[i] = y.reshape((side_cond, side_cond))
-    py_data[i] = px.reshape((side_cond, side_cond))
+    py_data[i] = py.reshape((side_cond, side_cond))
 
 source.close()
 dest.close()

@@ -84,16 +84,20 @@ total_cond = source.attrs["total_samples"] * 5
 x0 = np.concatenate((source["coords/x"][...].flatten(),
                      source["coords/x"][...].flatten(),
                      source["coords/x"][...].flatten(),
+                     source["coords/x"][...].flatten(),
                      source["coords/x"][...].flatten()))
 px0 = np.concatenate((source["coords/px"][...].flatten(),
+                      source["coords/px"][...].flatten(),
                       source["coords/px"][...].flatten(),
                       source["coords/px"][...].flatten(),
                       source["coords/px"][...].flatten()))
 y0 = np.concatenate((source["coords/y"][...].flatten(),
                      source["coords/y"][...].flatten(),
                      source["coords/y"][...].flatten(),
+                     source["coords/y"][...].flatten(),
                      source["coords/y"][...].flatten()))
 py0 = np.concatenate((source["coords/py"][...].flatten(),
+                      source["coords/py"][...].flatten(),
                       source["coords/py"][...].flatten(),
                       source["coords/py"][...].flatten(),
                       source["coords/py"][...].flatten()))

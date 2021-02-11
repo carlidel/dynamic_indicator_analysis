@@ -135,31 +135,24 @@ dest.attrs["kick_sigma"] = kick_sigma
 
 for turns in turn_list:
     engine = hm.partial_track.generate_instance(x0, px0, y0, py0)
-
+    print(turns)
     # Forward
     if not forward_kick:
+        print("forward")
         engine.compute(turns, source.attrs["epsilon"])
     else:
-        for i in range(turns):
-            engine.compute(1, source.attrs["epsilon"])
-            kx, kpx, ky, kpy = compute_kicks(
-                total_cond, kick_module, kick_sigma)
-            engine.add_kick(kx, kpx, ky, kpy)
+        print("forward")
+        engine.compute_with_kick(turns, source.attrs["epsilon"], kick_module=kick_module, kick_sigma=kick_sigma)
 
     # Backward
     if not backward_kick:
+        print("backward")
         x, px, y, py, steps = engine.inverse_compute(
             turns, source.attrs["epsilon"])
     else:
-        for i in range(turns):
-            engine.inverse_compute(1, source.attrs["epsilon"])
-            kx, kpx, ky, kpy = compute_kicks(
-                total_cond, kick_module, kick_sigma)
-            engine.add_kick(kx, kpx, ky, kpy)
-        x = engine.x
-        px = engine.px
-        y = engine.y
-        py = engine.py
+        print("backward")
+        x, px, y, py, steps = engine.inverse_compute_with_kick(
+            turns, source.attrs["epsilon"], kick_module, kick_sigma)
 
     dest.create_dataset(
         "/{}/x".format(turns), data=x.reshape((side_cond, side_cond)))
