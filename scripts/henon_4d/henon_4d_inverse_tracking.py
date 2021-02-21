@@ -4,6 +4,7 @@ import h5py
 import argparse
 import os
 import re
+import sys
 
 from uniform_sphere_sampling import sample_4d_sphere
 
@@ -139,20 +140,20 @@ for turns in turn_list:
     # Forward
     if not forward_kick:
         print("forward")
-        engine.compute(turns, source.attrs["epsilon"])
+        engine.compute(turns, source.attrs["epsilon"], source.attrs["mu"])
     else:
         print("forward")
-        engine.compute_with_kick(turns, source.attrs["epsilon"], kick_module=kick_module, kick_sigma=kick_sigma)
+        engine.compute_with_kick(turns, source.attrs["epsilon"], source.attrs["mu"], kick_module=kick_module, kick_sigma=kick_sigma)
 
     # Backward
     if not backward_kick:
         print("backward")
         x, px, y, py, steps = engine.inverse_compute(
-            turns, source.attrs["epsilon"])
+            turns, source.attrs["epsilon"], source.attrs["mu"])
     else:
         print("backward")
         x, px, y, py, steps = engine.inverse_compute_with_kick(
-            turns, source.attrs["epsilon"], kick_module, kick_sigma)
+            turns, source.attrs["epsilon"], source.attrs["mu"], kick_module, kick_sigma)
 
     dest.create_dataset(
         "/{}/x".format(turns), data=x.reshape((side_cond, side_cond)))

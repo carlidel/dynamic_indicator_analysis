@@ -228,7 +228,7 @@ gali4, gali3, gali2 = gali(matrix4, matrix3, matrix2,
                            source.attrs["total_samples"])
 
 counter = 0
-for i in tqdm(range(0, (max_turns//tau)+1)):
+for i in tqdm(range(0, (max_turns//tau)+5)):
     x, px, y, py, _ = engine.compute(
         tau, source.attrs["epsilon"], source.attrs["mu"])
 
@@ -266,7 +266,7 @@ for i in tqdm(range(0, (max_turns//tau)+1)):
     gali3 = np.amin([gali3, gali2_n], axis=0)
     gali2 = np.amin([gali3, gali2_n], axis=0)
 
-    while i * tau > turn_list[counter]:
+    while i * tau > (turn_list[counter] if counter < len(turn_list) else np.inf):
         dest.create_dataset(
             "gali4/{}".format(turn_list[counter]),
             data=gali4.reshape((side_cond, side_cond))

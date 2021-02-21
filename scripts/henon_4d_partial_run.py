@@ -37,12 +37,13 @@ to_do = {
 
 }
 
-for mu, epsilon in tqdm(combos[1:], desc="General computation"):
+for mu, epsilon in tqdm(combos[5:], desc="General computation"):
     print("------------------")
     print("Epsilon:", epsilon)
     print("Mu:", mu)
     print("------------------")
     print("Generate initial conditions")
+    """
     subprocess.run([
         "python",
         os.path.join(scriptdir, "henon_4d_gen_initial_condition.py"),
@@ -54,10 +55,10 @@ for mu, epsilon in tqdm(combos[1:], desc="General computation"):
         [str(a) for a in extents] +
         ["-o", str(outdir)]
     )
-
+    """
     inputfile = "henon_4d_init_eps_{:.2}_mu_{:.2}_id_{}".format(
         epsilon, mu, id_main).replace(".", "_") + ".hdf5"
-    
+
     print("Long Tracking")
 
     subprocess.run([
@@ -257,55 +258,3 @@ for mu, epsilon in tqdm(combos[1:], desc="General computation"):
         "-o",
         outdir
     ])
-
-    print("Sali")
-
-    id_secondary = "{:.0e}".format(displacement_magnitude)
-
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_sali.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        str(displacement_magnitude),
-        str(tau),
-        id_secondary,
-        "-o",
-        outdir
-    ])
-
-    print("Gali")
-
-    id_secondary = "{:.0e}".format(displacement_magnitude)
-
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_gali.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        str(displacement_magnitude),
-        str(tau),
-        id_secondary,
-        "-o",
-        outdir
-    ])
-
-    print("FFT computation")
-
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_fft_tracking.py"),
-        os.path.join(inputdir, inputfile),
-        str(fft_min_power),
-        str(fft_max_power),
-        "-ncores",
-        str(2048),
-        "-o",
-        outdir
-    ])
-
-    print("------------------")

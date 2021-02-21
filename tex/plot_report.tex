@@ -14,6 +14,7 @@
 \mathtoolsset{showonlyrefs,showmanualtags}
 
 \usepackage{graphicx}
+\graphicspath{{../fig2}} %Setting the graphicspath
 \usepackage{subfig}
 \usepackage{wrapfig}
 \usepackage{sidecap}
@@ -33,46 +34,926 @@
 
 \maketitle
 
+\section{Modello in analisi}
+
+Si analizza una Mappa di Hénon modulata 4D. Dalla letteratura [] e dalle analisi precedenti, si opera col seguente modello:
+
+\begin{equation}
+    \left(\begin{array}{c}
+    x^{(n+1)} \\
+    p_{x}^{(n+1)} \\
+    y^{(n+1)} \\
+    p_{y}^{(n+1)}
+    \end{array}\right)=\mathbf{L}\left(\begin{array}{c}
+    x^{(n)} \\
+    p_{x}^{(n)}+\left[x^{(n)}\right]^{2}-\left[y^{(n)}\right]^{2} \\
+    y^{(n)} \\
+    p_{y}^{(n)}-2 x^{(n)} y^{(n)}
+    \end{array}\right)
+\end{equation}
+
+Dove $\mathbf{L}$ è la matrice di rotazione
+
+\begin{equation}
+    \mathbf{L}=\left(\begin{array}{cc}
+    R\left(\omega_{x}^{(n)}\right) & 0 \\
+    0 & R\left(\omega_{y}^{(n)}\right)
+    \end{array}\right)
+\end{equation}
+
+Con le frequenze modulate $\omega_{x}^{(n)}$ e $\omega_{y}^{(n)}$ fatte variare nel tempo secondo le formule:
+
+\begin{equation}
+    \begin{array}{l}
+    \omega_{x}^{(n)}=\omega_{x 0}\left(1+\epsilon \sum_{k=1}^{m} \epsilon_{k} \cos \left(\Omega_{k} n\right)\right) \\
+    \omega_{y}^{(n)}=\omega_{y 0}\left(1+\epsilon \sum_{k=1}^{m} \epsilon_{k} \cos \left(\Omega_{k} n\right)\right)
+    \end{array}
+\end{equation}
+
+Si considerano i seguenti parametri di tune modulation, basati sulle analisi sperimentali di SPS [] e utilizzati in precedente letteratura. $\omega_{x0}$ e $\omega_{y0}$ sono tenuti rispettivamente a 0.168 e 0.201.
+
+\begin{equation}
+    \begin{array}{ccc}
+    \hline \hline k & \Omega_{k} & 10^{4} \epsilon_{k} \\
+    \hline 1 & 2 \pi / 868.12 & 1.000 \\
+    2 & 2 \Omega_{1} & 0.218 \\
+    3 & 3 \Omega_{1} & 0.708 \\
+    4 & 6 \Omega_{1} & 0.254 \\
+    5 & 7 \Omega_{1} & 0.100 \\
+    6 & 10 \Omega_{1} & 0.078 \\
+    7 & 12 \Omega_{1} & 0.218 \\
+    \hline \hline
+    \end{array}
+\end{equation}
+
+Vengono analizzati valori di $\epsilon$ tra 0 (nessuna modulazione) e 64.
+
+È nel nostro interesse considerare anche gli effetti di un kick ottupolare. Consideriamo pertanto anche il seguente modello []:
+
+\begin{equation}
+    \left(\begin{array}{c}
+    x^{(n+1)} \\
+    p_{x}^{(n+1)} \\
+    y^{(n+1)} \\
+    p_{y}^{(n+1)}
+    \end{array}\right)=\mathbf{L}\left(\begin{array}{c}
+    x^{(n)} \\
+    p_{x}^{(n)}+\left[x^{(n)}\right]^{2}-\left[y^{(n)}\right]^{2} + \mu(\left[x^{(n)}\right]^{3} - 3 x^{(n)}\left[y^{(n)}\right]^{2}) \\
+    y^{(n)} \\
+    p_{y}^{(n)}-2 x^{(n)} y^{(n)} + \mu(3\left[x^{(n)}\right]^{2}y^{(n)} -\left[y^{(n)}\right]^{3})
+    \end{array}\right)
+\end{equation}
+
+e consideriamo come valori di $\mu$ 0.0, -0.2, 0.2, -1.0, 1.0.
+
 \begin{figure}[!htp]
     \centering
-    \subfloat[][subcap]
+    \subfloat[][$\epsilon = 0$]
         {
-        \includegraphics[width=0.31\textwidth]{img/.jpg}
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
         }
-    \subfloat[][subcap]
+    \subfloat[][$\epsilon = 0$]
         {
-        \includegraphics[width=0.31\textwidth]{img/.jpg}
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time_wkicks_1e-12.png}
         }
-    \subfloat[][subcap]
+    \subfloat[][$\epsilon = 0$]
         {
-        \includegraphics[width=0.31\textwidth]{img/.jpg}
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time_wkicks_1e-8.png}
         }\\
-    \subfloat[][subcap]
+    \subfloat[][$\epsilon = 1$]
         {
-        \includegraphics[width=0.31\textwidth]{img/.jpg}
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
         }
-    \subfloat[][subcap]
+    \subfloat[][$\epsilon = 1$]
         {
-        \includegraphics[width=0.31\textwidth]{img/.jpg}
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time_wkicks_1e-12.png}
         }
-    \subfloat[][subcap]
+    \subfloat[][$\epsilon = 1$]
         {
-        \includegraphics[width=0.31\textwidth]{img/.jpg}
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time_wkicks_1e-8.png}
         }\\
-    \subfloat[][subcap]
+    \subfloat[][$\epsilon = 16$]
         {
-        \includegraphics[width=0.31\textwidth]{img/.jpg}
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
         }
-    \subfloat[][subcap]
+    \subfloat[][$\epsilon = 16$]
         {
-        \includegraphics[width=0.31\textwidth]{img/.jpg}
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time_wkicks_1e-12.png}
         }
-    \subfloat[][subcap]
+    \subfloat[][$\epsilon = 16$]
         {
-        \includegraphics[width=0.31\textwidth]{img/.jpg}
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time_wkicks_1e-8.png}
         }\\
-    \caption{caption}
-    \label{fig:label}
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time_wkicks_1e-12.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time_wkicks_1e-8.png}
+        }\\
+    \caption{Stability plots}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LI_4.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LI_4.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LI_4.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LI_4.png}
+        }\\
+    \caption{Semplice LI}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LI_6.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LI_6.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LI_6.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LI_6.png}
+        }\\
+    \caption{Semplice LI}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LI_10.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LI_10.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LI_10.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LI_10.png}
+        }\\
+    \caption{Semplice LI}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LEI_1_PP_4.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LEI_2_PP_4.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LEI_3_PP_4.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LEI_1_PP_4.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LEI_2_PP_4.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LEI_3_PP_4.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LEI_1_PP_4.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LEI_2_PP_4.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LEI_3_PP_4.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LEI_1_PP_4.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LEI_2_PP_4.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LEI_3_PP_4.png}
+        }\\
+    \caption{LEI}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LEI_1_PP_6.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LEI_2_PP_6.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LEI_3_PP_6.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LEI_1_PP_6.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LEI_2_PP_6.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LEI_3_PP_6.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LEI_1_PP_6.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LEI_2_PP_6.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LEI_3_PP_6.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LEI_1_PP_6.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LEI_2_PP_6.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LEI_3_PP_6.png}
+        }\\
+    \caption{LEI}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LEI_1_PP_10.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LEI_2_PP_10.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_LEI_3_PP_10.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LEI_1_PP_10.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LEI_2_PP_10.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_LEI_3_PP_10.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LEI_1_PP_10.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LEI_2_PP_10.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_LEI_3_PP_10.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LEI_1_PP_10.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LEI_2_PP_10.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_LEI_3_PP_10.png}
+        }\\
+    \caption{LEI}
+\end{figure}
+
+% RE
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_RE_4.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_RE_4.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_RE_4.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_RE_4.png}
+        }\\
+    \caption{RE}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_RE_6.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_RE_6.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_RE_6.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_RE_6.png}
+        }\\
+    \caption{RE}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_RE_10.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_RE_10.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_RE_10.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_RE_10.png}
+        }\\
+    \caption{RE}
+\end{figure}
+
+% gali
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_gali2_4.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_gali3_4.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_gali4_4.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_gali2_4.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_gali3_4.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_gali4_4.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_gali2_4.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_gali3_4.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_gali4_4.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_gali2_4.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_gali3_4.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_gali4_4.png}
+        }\\
+    \caption{Gali}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_gali2_6.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_gali3_6.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_gali4_6.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_gali2_6.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_gali3_6.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_gali4_6.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_gali2_6.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_gali3_6.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_gali4_6.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_gali2_6.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_gali3_6.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_gali4_6.png}
+        }\\
+    \caption{Gali}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_gali2_9.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_gali3_9.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_gali4_9.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_gali2_9.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_gali3_9.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_gali4_9.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_gali2_9.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_gali3_9.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_gali4_9.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_gali2_9.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_gali3_9.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_gali4_9.png}
+        }\\
+    \caption{Gali}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_sali_9.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_sali_9.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_sali_9.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_sali_9.png}
+        }\\
+    \caption{Sali}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_megno_4.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_megno_4.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_megno_4.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_megno_4.png}
+        }\\
+    \caption{Megno}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_megno_6.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_megno_6.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_megno_6.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_megno_6.png}
+        }\\
+    \caption{Megno}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_0_0_mu_0_0_megno_9.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_0_mu_0_0_megno_10.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_megno_10.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.49\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_megno_10.png}
+        }\\
+    \caption{Megno}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_0_1.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_0_2.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_0_3.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_1_1.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_1_2.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_1_3.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_16_1.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_16_2.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_16_3.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_64_1.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_64_2.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/res_eps_64_3.png}
+        }\\
+    \caption{Resonance plots}
+\end{figure}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_frequency_map_13_wmax.png}
+        }
+    \subfloat[][$\epsilon = 0$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_0_0_mu_0_0_frequency_map_13_log.png}
+        }\\
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_frequency_map_13_wmax.png}
+        }
+    \subfloat[][$\epsilon = 1$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_0_mu_0_0_frequency_map_13_log.png}
+        }\\
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_frequency_map_13_wmax.png}
+        }
+    \subfloat[][$\epsilon = 16$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_1_6e+01_mu_0_0_frequency_map_13_log.png}
+        }\\
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_stab_time.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_frequency_map_13_wmax.png}
+        }
+    \subfloat[][$\epsilon = 64$]
+        {
+        \includegraphics[width=0.30\textwidth]{img/henon_4d_eps_6_4e+01_mu_0_0_frequency_map_13_log.png}
+        }\\
+    \caption{Frequency Map}
 \end{figure}
 
 \end{document}

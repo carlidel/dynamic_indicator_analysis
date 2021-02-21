@@ -153,13 +153,13 @@ dest.attrs["tau"] = tau
 sali_value = sali(x0, px0, y0, py0)
 
 counter = 0
-for i in tqdm(range(0, (max_turns//tau)+1)):
+for i in tqdm(range(0, (max_turns//tau)+5)):
     x, px, y, py, _ = engine.compute(
         tau, source.attrs["epsilon"], source.attrs["mu"])
     
     sali_value = np.amin([sali_value, sali(x,px,y,py)], axis=0)
 
-    while i * tau > turn_list[counter]:
+    while i * tau > (turn_list[counter] if counter < len(turn_list) else np.inf):
         dest.create_dataset(
             "{}".format(turn_list[counter]),
             data=sali_value.reshape((side_cond, side_cond))
