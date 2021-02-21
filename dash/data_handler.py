@@ -37,7 +37,7 @@ class data_handler(object):
             return self.param_dict[param]
 
     def get_data(self, parameters):
-        return self.f_data(parameters, self.datapath_dict)
+        return self.f_data(parameters)
 
     def get_plot(self, parameters, log_scale=False):
         return self.f_plot(parameters, log_scale)
