@@ -122,7 +122,6 @@ args = parser.parse_args()
 scriptdir = "./"
 #######################################################
 outdir = args.outdir
-inputdir = "./"
 
 epsilon = args.epsilon
 mu = args.mu
@@ -186,7 +185,7 @@ print("Long Tracking")
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_long_track.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(max_turns_long_run),
     "-o",
     outdir
@@ -205,7 +204,7 @@ print("Long Tracking (with kicks)")
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(max_turns_long_run),
     str(1e-4),
     "1e-4",
@@ -226,7 +225,7 @@ print("Long Tracking (with kicks) bis")
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(max_turns_long_run),
     str(1e-8),
     "1e-8",
@@ -248,7 +247,7 @@ print("Long Tracking (with kicks) ter")
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(max_turns_long_run),
     str(1e-12),
     "1e-12",
@@ -271,7 +270,7 @@ id_secondary = "{:.0e}".format(displacement)
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_track_displacement.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(min_turns),
     str(max_turns),
     str(turn_samples),
@@ -297,7 +296,7 @@ id_secondary = "{:.0e}".format(displacement)
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_track_orto_displacement.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(min_turns),
     str(max_turns),
     str(turn_samples),
@@ -323,7 +322,7 @@ id_secondary = "no_kick"
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(min_turns),
     str(max_turns),
     str(turn_samples),
@@ -351,7 +350,7 @@ id_secondary = "unif_kick"
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(min_turns),
     str(max_turns),
     str(turn_samples),
@@ -379,7 +378,7 @@ id_secondary = "gauss_kick"
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(min_turns),
     str(max_turns),
     str(turn_samples),
@@ -407,7 +406,7 @@ id_secondary = "unif_kick_forward"
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(min_turns),
     str(max_turns),
     str(turn_samples),
@@ -435,7 +434,7 @@ id_secondary = "gauss_kick_forward"
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(min_turns),
     str(max_turns),
     str(turn_samples),
@@ -461,7 +460,7 @@ print("------------------")
 # subprocess.run([
 #     "python",
 #     os.path.join(scriptdir, "henon_4d_megno.py"),
-#     os.path.join(inputdir, inputfile),
+#     inputfile,
 #     str(min_turns),
 #     str(max_turns),
 #     str(turn_samples),
@@ -486,7 +485,7 @@ id_secondary = "{:.0e}".format(displacement)
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_sali.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(min_turns),
     str(max_turns),
     str(turn_samples),
@@ -512,7 +511,7 @@ id_secondary = "{:.0e}".format(displacement)
 subprocess.run([
     "python",
     os.path.join(scriptdir, "henon_4d_gali.py"),
-    os.path.join(inputdir, inputfile),
+    inputfile,
     str(min_turns),
     str(max_turns),
     str(turn_samples),
@@ -535,7 +534,7 @@ print("------------------")
 # subprocess.run([
 #     "python",
 #     os.path.join(scriptdir, "henon_4d_fft_tracking.py"),
-#     os.path.join(inputdir, inputfile),
+#     inputfile,
 #     str(fft_min_power),
 #     str(fft_max_power),
 #     "-ncores",
