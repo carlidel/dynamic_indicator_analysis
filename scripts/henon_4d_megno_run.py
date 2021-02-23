@@ -13,7 +13,7 @@ def print_elapsed_time(start, end):
 
 
 parser = argparse.ArgumentParser(
-    description="FFT 'smart' run",
+    description="General run which generates most of the datasets",
     fromfile_prefix_chars='@'
 )
 
@@ -48,15 +48,27 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "fft_min_power",
-    help="minimum 2** to consider",
+    "min_turns",
+    help="min amount of turns",
     type=int
 )
 
 parser.add_argument(
-    "fft_max_power",
-    help="maximum 2** to consider",
+    "max_turns",
+    help="max amount of turns",
     type=int
+)
+
+parser.add_argument(
+    "samples",
+    help="turn samples to be made in log spacing",
+    type=int
+)
+
+parser.add_argument(
+    "displacement",
+    help="magnitude of the initial random displacement",
+    type=float
 )
 
 parser.add_argument(
@@ -96,10 +108,12 @@ side_samples = args.n_samples
 method = args.method
 extents = args.extents
 
-fft_min_power = args.fft_min_power
-fft_max_power = args.fft_max_power
+displacement = args.displacement
 
-start_0 = time.time()
+min_turns = args.min_turns
+max_turns = args.max_turns
+turn_samples = args.samples
+
 start_0 = time.time()
 
 print("------------------")
@@ -128,22 +142,24 @@ print_elapsed_time(start, end)
 print("Total elapsed time so far:")
 print_elapsed_time(start_0, end)
 print("------------------")
-start = time.time()
 
 inputfile = os.path.join(
     outdir,
     "henon_4d_init_eps_{:.2}_mu_{:.2}_id_{}".format(
         epsilon, mu, id_main).replace(".", "_") + ".hdf5")
 
-print("FFT computation")
+start = time.time()
+print("Megno")
+id_secondary = "{:.0e}".format(displacement)
 subprocess.run([
     "python",
-    os.path.join(scriptdir, "henon_4d_fft_tracking.py"),
+    os.path.join(scriptdir, "henon_4d_megno.py"),
     inputfile,
-    str(fft_min_power),
-    str(fft_max_power),
-    "-ncores",
-    str(2048),
+    str(min_turns),
+    str(max_turns),
+    str(turn_samples),
+    str(displacement),
+    id_secondary,
     "-o",
     outdir
 ])

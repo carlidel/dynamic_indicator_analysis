@@ -116,14 +116,19 @@ dest.create_dataset(
 dest.create_dataset(
     "/coords/py", data=py0[total_cond//2:].reshape((side_cond, side_cond)))
 
+epsilon = source.attrs["epsilon"]
+mu = source.attrs["mu"]
+
 sum = np.ones(source.attrs["total_samples"])
 x1 = x0
 px1 = px0
 y1 = y0
 py1 = py0
+
+source.close()
+
 for i in tqdm(range(0, max_turns)):
-    x2, px2, y2, py2, _ = engine.compute(
-        1, source.attrs["epsilon"], source.attrs["mu"])
+    x2, px2, y2, py2, _ = engine.compute(1, epsilon, mu)
     sum += (
         np.log(
             (
@@ -149,3 +154,5 @@ for i in tqdm(range(0, max_turns)):
             "{}".format(i+1),
             data=sum.reshape((side_cond, side_cond))
         )
+
+dest.close()

@@ -106,6 +106,11 @@ px0 = source["coords/px"][...].flatten()
 y0 = source["coords/y"][...].flatten()
 py0 = source["coords/py"][...].flatten()
 
+epsilon = source.attrs["epsilon"]
+mu = source.attrs["mu"]
+
+source.close()
+
 for i in tqdm(range(0, total_cond, N_CORES)):
     i_end = min(i + N_CORES, total_cond)
 
@@ -114,8 +119,7 @@ for i in tqdm(range(0, total_cond, N_CORES)):
         cuda_device=False
     )
 
-    x, px, y, py = engine.compute(
-        max_turns, source.attrs["epsilon"], source.attrs["mu"], full_track=True)
+    x, px, y, py = engine.compute(max_turns, epsilon, mu, full_track=True)
     
     for j in range(min_power, max_power + 1):
         steps = 2 ** (max_power - j)
@@ -147,5 +151,4 @@ for i in tqdm(range(0, total_cond, N_CORES)):
                 value_y = interpolation(fft_y[:, elem], value_y)
                 tune_y[k, true_i//side_cond, true_i % side_cond] = value_y
 
-source.close()
 dest.close()
