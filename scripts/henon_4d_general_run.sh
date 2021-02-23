@@ -13,4 +13,7 @@ which python
 mkdir data
 mkdir img
 
+echo $1
+echo $2
+
 python3 henon_4d_general_run.py basic $1 $2 500 polar 10000000 1e-10 1e-11 10 100000 49 100 1e-12 subbasic 0 1 0 1 0 0 -outdir /afs/cern.ch/work/c/camontan/public/dynamic_indicator_analysis/data
