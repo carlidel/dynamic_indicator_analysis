@@ -1,311 +1,551 @@
 import numpy as np
 import subprocess
 import os
-import itertools
+import time
 from tqdm import tqdm
+import argparse
 
-scriptdir = "henon_4d"
-outdir = "../data"
-inputdir = "../data"
+"""GALI AND FFT ARE INCLUDED BUT COMMENTED, BECAUSE THEY TAKE MUCH MUCH MORE TIME!!!"""
 
-epsilon_list = [0.0, 1.0, 16.0, 64.0]
-mu_list = [0.0, -0.2, 0.2, -1.0, 1.0]
-combos = list(itertools.product(mu_list, epsilon_list))
+def print_elapsed_time(start, end):
+    hours, rem = divmod(end-start, 3600)
+    minutes, seconds = divmod(rem, 60)
+    print("{:0>2}:{:0>2}:{:05.2f}".format(int(hours), int(minutes), seconds))
 
-id_main = "basic_view"
+
+parser = argparse.ArgumentParser(
+    description="General run which generates most of the datasets",
+    fromfile_prefix_chars='@'
+)
+
+parser.add_argument(
+    "id",
+    help="id of the generated dataset"
+)
+
+parser.add_argument(
+    "epsilon",
+    help="epsilon value for modulation",
+    type=float
+)
+
+parser.add_argument(
+    "mu",
+    help="mu value for modulation",
+    type=float
+)
+
+parser.add_argument(
+    "n_samples",
+    help="n samples per side",
+    type=int
+)
+
+parser.add_argument(
+    "method",
+    help="coordinate method for sampling the initial conditions",
+    choices=["polar", "x_px", "y_py"],
+    default="polar"
+)
+
+parser.add_argument(
+    "max_turns_long_run",
+    help="turns to be done for the long tracking",
+    type=int
+)
+
+parser.add_argument(
+    "kick_magnitude",
+    help="kick magnitude",
+    type=float
+)
+
+parser.add_argument(
+    "kick_sigma",
+    help="kick sigma",
+    type=float
+)
+
+parser.add_argument(
+    "min_turns",
+    help="min amount of turns",
+    type=int
+)
+
+parser.add_argument(
+    "max_turns",
+    help="max amount of turns",
+    type=int
+)
+
+parser.add_argument(
+    "samples",
+    help="turn samples to be made in log spacing",
+    type=int
+)
+
+parser.add_argument(
+    "tau",
+    help="after how many steps you want SALI/GALI to be computed",
+    type=int
+)
+
+parser.add_argument(
+    "displacement",
+    help="magnitude of the initial random displacement",
+    type=float
+)
+
+parser.add_argument(
+    "sub_id",
+    help="sub id for this precise dataset",
+    default="0"
+)
+
+parser.add_argument(
+    "extents",
+    help="extents where you want to operate",
+    nargs='*',
+    default=[0, 1, 0, 1, 0, 0]
+)
+
+parser.add_argument(
+    "-outdir",
+    action="store",
+    help="output directory",
+    default="./"
+)
+
+args = parser.parse_args()
+
+########## TODO::CHANGE WHEN NECESSARY ################
+scriptdir = "./"
+#######################################################
+outdir = args.outdir
+inputdir = "./"
+
+epsilon = args.epsilon
+mu = args.mu
+
+id_main = args.id
 # Samples per side
-side_samples = 500
+side_samples = args.n_samples
 # Sampling method
-method = "polar"
-extents = [0.0, 1.0, 0.0, 1.0, 0.0, 0.0]
+method = args.method
+extents = args.extents
 
-displacement_magnitude = 1e-12
-displacement_sigma = 1e-13
+displacement = args.displacement
+kick_magnitude = args.kick_magnitude
+kick_sigma = args.kick_sigma
 
-max_turns_long_run = 10000000
+max_turns_long_run = args.max_turns_long_run
 
-min_turns = 10
-max_turns = 100000
-turn_samples = 51
+min_turns = args.min_turns
+max_turns = args.max_turns
+turn_samples = args.samples
 
-tau = 100
+tau = args.tau
 
-fft_min_power = 8
-fft_max_power = 14
+start_0 = time.time()
 
-to_do = {
+print("------------------")
+print("Epsilon:", epsilon)
+print("Mu:", mu)
+print("------------------")
 
-}
+start = time.time()
+print("Generate initial conditions")
 
-for mu, epsilon in tqdm(combos[1:], desc="General computation"):
-    print("------------------")
-    print("Epsilon:", epsilon)
-    print("Mu:", mu)
-    print("------------------")
-    print("Generate initial conditions")
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_gen_initial_condition.py"),
-        str(id_main),
-        str(epsilon),
-        str(mu),
-        str(side_samples),
-        str(method)] +
-        [str(a) for a in extents] +
-        ["-o", str(outdir)]
-    )
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_gen_initial_condition.py"),
+    str(id_main),
+    str(epsilon),
+    str(mu),
+    str(side_samples),
+    str(method)] +
+    [str(a) for a in extents] +
+    ["-o", str(outdir)]
+)
 
-    inputfile = "henon_4d_init_eps_{:.2}_mu_{:.2}_id_{}".format(
-        epsilon, mu, id_main).replace(".", "_") + ".hdf5"
-    
-    print("Long Tracking")
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_long_track.py"),
-        os.path.join(inputdir, inputfile),
-        str(max_turns_long_run),
-        "-o",
-        outdir
-    ])
+inputfile = os.path.join(
+    outdir,
+    "henon_4d_init_eps_{:.2}_mu_{:.2}_id_{}".format(
+        epsilon, mu, id_main).replace(".", "_") + ".hdf5")
 
-    print("Long Tracking (with kicks)")
+print("Long Tracking")
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
-        os.path.join(inputdir, inputfile),
-        str(max_turns_long_run),
-        str(1e-6),
-        "1e-6",
-        "-o",
-        outdir
-    ])
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_long_track.py"),
+    os.path.join(inputdir, inputfile),
+    str(max_turns_long_run),
+    "-o",
+    outdir
+])
 
-    print("Long Tracking (with kicks) bis")
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
-        os.path.join(inputdir, inputfile),
-        str(max_turns_long_run),
-        str(1e-8),
-        "1e-8",
-        "-o",
-        outdir
-    ])
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
 
-    print("Long Tracking (with kicks) ter")
+print("Long Tracking (with kicks)")
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
-        os.path.join(inputdir, inputfile),
-        str(max_turns_long_run),
-        str(1e-12),
-        "1e-12",
-        "-o",
-        outdir
-    ])
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
+    os.path.join(inputdir, inputfile),
+    str(max_turns_long_run),
+    str(1e-4),
+    "1e-4",
+    "-o",
+    outdir
+])
 
-    print("Single displacement")
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
 
-    id_secondary = "{:.0e}".format(displacement_magnitude)
+print("Long Tracking (with kicks) bis")
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_track_displacement.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        str(displacement_magnitude),
-        id_secondary,
-        "-o",
-        outdir
-    ])
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
+    os.path.join(inputdir, inputfile),
+    str(max_turns_long_run),
+    str(1e-8),
+    "1e-8",
+    "-o",
+    outdir
+])
 
-    print("Orthonormal displacement")
 
-    id_secondary = "{:.0e}".format(displacement_magnitude)
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_track_orto_displacement.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        str(displacement_magnitude),
-        id_secondary,
-        "-o",
-        outdir
-    ])
+print("Long Tracking (with kicks) ter")
 
-    print("Pure Inverse Tracking")
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
+    os.path.join(inputdir, inputfile),
+    str(max_turns_long_run),
+    str(1e-12),
+    "1e-12",
+    "-o",
+    outdir
+])
 
-    id_secondary = "no_kick"
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        "false",
-        "false",
-        str(displacement_magnitude),
-        str(0.0),
-        id_secondary,
-        "-o",
-        outdir
-    ])
+print("Single displacement")
 
-    print("Uniform Noisy Tracking")
+id_secondary = "{:.0e}".format(displacement)
 
-    id_secondary = "unif_kick"
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_track_displacement.py"),
+    os.path.join(inputdir, inputfile),
+    str(min_turns),
+    str(max_turns),
+    str(turn_samples),
+    str(displacement),
+    id_secondary,
+    "-o",
+    outdir
+])
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        "true",
-        "true",
-        str(displacement_magnitude),
-        str(0.0),
-        id_secondary,
-        "-o",
-        outdir
-    ])
 
-    print("Gaussian Noisy Tracking")
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
 
-    id_secondary = "gauss_kick"
+print("Orthonormal displacement")
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        "true",
-        "true",
-        str(displacement_magnitude),
-        str(displacement_sigma),
-        id_secondary,
-        "-o",
-        outdir
-    ])
+id_secondary = "{:.0e}".format(displacement)
 
-    print("Uniform Noisy Tracking (forward only)")
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_track_orto_displacement.py"),
+    os.path.join(inputdir, inputfile),
+    str(min_turns),
+    str(max_turns),
+    str(turn_samples),
+    str(displacement),
+    id_secondary,
+    "-o",
+    outdir
+])
 
-    id_secondary = "unif_kick_forward"
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        "true",
-        "false",
-        str(displacement_magnitude),
-        str(0.0),
-        id_secondary,
-        "-o",
-        outdir
-    ])
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
 
-    print("Gaussian Noisy Tracking (forward only)")
+print("Pure Inverse Tracking")
 
-    id_secondary = "gauss_kick_forward"
+id_secondary = "no_kick"
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        "true",
-        "false",
-        str(displacement_magnitude),
-        str(displacement_sigma),
-        id_secondary,
-        "-o",
-        outdir
-    ])
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
+    os.path.join(inputdir, inputfile),
+    str(min_turns),
+    str(max_turns),
+    str(turn_samples),
+    "false",
+    "false",
+    str(displacement),
+    str(0.0),
+    id_secondary,
+    "-o",
+    outdir
+])
 
-    print("Megno")
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
 
-    id_secondary = "{:.0e}".format(displacement_magnitude)
+print("Uniform Noisy Tracking")
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_megno.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        str(displacement_magnitude),
-        id_secondary,
-        "-o",
-        outdir
-    ])
+id_secondary = "unif_kick"
 
-    print("Sali")
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
+    os.path.join(inputdir, inputfile),
+    str(min_turns),
+    str(max_turns),
+    str(turn_samples),
+    "true",
+    "true",
+    str(kick_magnitude),
+    str(0.0),
+    id_secondary,
+    "-o",
+    outdir
+])
 
-    id_secondary = "{:.0e}".format(displacement_magnitude)
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_sali.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        str(displacement_magnitude),
-        str(tau),
-        id_secondary,
-        "-o",
-        outdir
-    ])
+print("Gaussian Noisy Tracking")
 
-    print("Gali")
+id_secondary = "gauss_kick"
 
-    id_secondary = "{:.0e}".format(displacement_magnitude)
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
+    os.path.join(inputdir, inputfile),
+    str(min_turns),
+    str(max_turns),
+    str(turn_samples),
+    "true",
+    "true",
+    str(kick_magnitude),
+    str(kick_sigma),
+    id_secondary,
+    "-o",
+    outdir
+])
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_gali.py"),
-        os.path.join(inputdir, inputfile),
-        str(min_turns),
-        str(max_turns),
-        str(turn_samples),
-        str(displacement_magnitude),
-        str(tau),
-        id_secondary,
-        "-o",
-        outdir
-    ])
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
 
-    print("FFT computation")
+print("Uniform Noisy Tracking (forward only)")
 
-    subprocess.run([
-        "python",
-        os.path.join(scriptdir, "henon_4d_fft_tracking.py"),
-        os.path.join(inputdir, inputfile),
-        str(fft_min_power),
-        str(fft_max_power),
-        "-ncores",
-        str(2048),
-        "-o",
-        outdir
-    ])
+id_secondary = "unif_kick_forward"
 
-    print("------------------")
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
+    os.path.join(inputdir, inputfile),
+    str(min_turns),
+    str(max_turns),
+    str(turn_samples),
+    "true",
+    "false",
+    str(kick_magnitude),
+    str(0.0),
+    id_secondary,
+    "-o",
+    outdir
+])
+
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
+
+print("Gaussian Noisy Tracking (forward only)")
+
+id_secondary = "gauss_kick_forward"
+
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
+    os.path.join(inputdir, inputfile),
+    str(min_turns),
+    str(max_turns),
+    str(turn_samples),
+    "true",
+    "false",
+    str(kick_magnitude),
+    str(kick_sigma),
+    id_secondary,
+    "-o",
+    outdir
+])
+
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+
+# start = time.time()
+# print("Megno")
+# id_secondary = "{:.0e}".format(displacement)
+# subprocess.run([
+#     "python",
+#     os.path.join(scriptdir, "henon_4d_megno.py"),
+#     os.path.join(inputdir, inputfile),
+#     str(min_turns),
+#     str(max_turns),
+#     str(turn_samples),
+#     str(displacement),
+#     id_secondary,
+#     "-o",
+#     outdir
+# ])
+# end = time.time()
+# print("Elapsed time:")
+# print_elapsed_time(start, end)
+# print("Total elapsed time so far:")
+# print_elapsed_time(start_0, end)
+# print("------------------")
+
+start = time.time()
+
+print("Sali")
+
+id_secondary = "{:.0e}".format(displacement)
+
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_sali.py"),
+    os.path.join(inputdir, inputfile),
+    str(min_turns),
+    str(max_turns),
+    str(turn_samples),
+    str(displacement),
+    str(tau),
+    id_secondary,
+    "-o",
+    outdir
+])
+
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+start = time.time()
+
+print("Gali")
+
+id_secondary = "{:.0e}".format(displacement)
+
+subprocess.run([
+    "python",
+    os.path.join(scriptdir, "henon_4d_gali.py"),
+    os.path.join(inputdir, inputfile),
+    str(min_turns),
+    str(max_turns),
+    str(turn_samples),
+    str(displacement),
+    str(tau),
+    id_secondary,
+    "-o",
+    outdir
+])
+
+end = time.time()
+print("Elapsed time:")
+print_elapsed_time(start, end)
+print("Total elapsed time so far:")
+print_elapsed_time(start_0, end)
+print("------------------")
+
+# start = time.time()
+# print("FFT computation")
+# subprocess.run([
+#     "python",
+#     os.path.join(scriptdir, "henon_4d_fft_tracking.py"),
+#     os.path.join(inputdir, inputfile),
+#     str(fft_min_power),
+#     str(fft_max_power),
+#     "-ncores",
+#     str(2048),
+#     "-o",
+#     outdir
+# ])
+# end = time.time()
+# print("Elapsed time:")
+# print_elapsed_time(start, end)
+# print("Total elapsed time so far:")
+# print_elapsed_time(start_0, end)
+# print("------------------")
