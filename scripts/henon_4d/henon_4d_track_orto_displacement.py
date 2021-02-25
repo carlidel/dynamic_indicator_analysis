@@ -1,7 +1,6 @@
 import numpy as np
 import henon_map as hm
 import h5py
-import ntpath
 import argparse
 import os
 import re
