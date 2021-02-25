@@ -60,13 +60,12 @@ parser.add_argument(
 args = parser.parse_args()
 
 input_file = args.input_file
-displ_file = args.displacement_file
 out_file = os.path.join(args.outdir, args.outname)
 
 min_order = args.min_order
 max_order = args.max_order
 
-d = h5py.File(displ_file, mode='r')
+d = h5py.File(input_file, mode='r')
 
 out = h5py.File(out_file, mode='w')
 out.attrs["inputfile"] = os.path.basename(input_file)
