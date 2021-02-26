@@ -17,8 +17,8 @@ for i, f in enumerate(data_file_list):
         print("Gathering", f)
         subprocess.run(["eos", "cp", os.path.join(data_dir, f), "."])
 
-        source_name = re.sub('orto_displacement', 'init', f)
-        source_name = re.sub(r"_subid_.*\.", r"\.", source_name)
+        source_name = re.sub('inverse_tracking', 'init', f)
+        source_name = re.sub(r"_subid_.*\.", ".", source_name)
         print("Gathering", source_name)
         subprocess.run(["eos", "cp", os.path.join(data_dir, source_name), "."])
 

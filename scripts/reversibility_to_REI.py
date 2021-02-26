@@ -3,7 +3,7 @@ import h5py
 import argparse
 import os
 import re
-
+from tqdm import tqdm
 
 def make_REI_matrix(x0, px0, y0, py0, x, px, y, py):
     d_x = x - x0
@@ -91,12 +91,12 @@ out = h5py.File(out_file, mode='w')
 out.attrs["inputfile"] = os.path.basename(input_file)
 
 turns = list(d)
-for t in turns:
+for t in tqdm(turns):
     matrix = make_REI_matrix(
         s["coords/x"][...], s["coords/px"][...], s["coords/y"][...], s["coords/py"][...],
         d[t]["x"][...], d[t]["px"][...], d[t]["y"][...], d[t]["py"][...]
     )
-    for i in range(min_order, max_order + 1):   
+    for i in tqdm(range(min_order, max_order + 1)):   
         data = v_faddeev_leverrier(matrix, [i])[:, :, 0]
         out.create_dataset(
             t + "/" + str(i),

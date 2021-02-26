@@ -10,7 +10,7 @@ transfer_input_files    = ./reversibility_to_REI.py, ./execute_reversibility_to_
 
 when_to_transfer_output = ON_EXIT
 
-+JobFlavour = "workday"
++JobFlavour = "testmatch"
 
 request_CPUs = 1
 

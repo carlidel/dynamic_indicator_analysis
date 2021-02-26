@@ -10,7 +10,7 @@ transfer_input_files    = ./displacement_to_LEI.py, ./execute_displacement_to_LE
 
 when_to_transfer_output = ON_EXIT
 
-+JobFlavour = "workday"
++JobFlavour = "testmatch"
 
 request_CPUs = 1
 
