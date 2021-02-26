@@ -11,4 +11,4 @@ export PATH=$MYPYTHON/bin:$PATH
 
 which python
 
-python3 execute_displacement_to_LEI.py
+python3 execute_displacement_to_LEI.py $1 $2

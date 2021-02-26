@@ -14,4 +14,4 @@ when_to_transfer_output = ON_EXIT
 
 request_CPUs = 1
 
-queue
+queue arguments from input_reversibility_to_REI.txt

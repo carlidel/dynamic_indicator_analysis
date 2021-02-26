@@ -5,41 +5,55 @@ import argparse
 import os
 import re
 
-data_dir = "/eos/project/d/da-and-diffusion-studies/DA_Studies/Simulations/Models/dynamic_indicator_analysis/dynamic_indicator_analysis/data"
+parser = argparse.ArgumentParser(
+    description="Convert rev data to REI data",
+    fromfile_prefix_chars='@'
+)
 
-file_gathering = subprocess.run(
-    ["eos", "ls", data_dir], stdout=subprocess.PIPE)
+parser.add_argument(
+    "data_dir",
+    help="data dir on eos"
+)
 
-data_file_list = file_gathering.stdout.decode("utf-8").split("\n")[:-1]
+parser.add_argument(
+    "source_file",
+    help="file to be used as input source"
+)
 
-for i, f in enumerate(data_file_list):
-    if "inverse_tracking" in f:
-        print("Gathering", f)
-        subprocess.run(["eos", "cp", os.path.join(data_dir, f), "."])
+parser.add_argument(
+    "displacement_file",
+    help="file with the displacement data"
+)
 
-        source_name = re.sub('orto_displacement', 'init', f)
-        source_name = re.sub(r"_subid_.*\.", r"\.", source_name)
-        print("Gathering", source_name)
-        subprocess.run(["eos", "cp", os.path.join(data_dir, source_name), "."])
+args = parser.parse_args()
+data_dir = args.data_dir
+source_file = args.source_file
+displacement_file = args.displacement_file
 
-        new_name = re.sub("inverse_tracking", "REI", f)
+print("Gathering", displacement_file)
+subprocess.run(["eos", "cp", os.path.join(data_dir, displacement_file), "."])
 
-        print("Executing script...")
-        subprocess.run([
-            "python",
-            "reversibility_to_REI.py",
-            source_name,
-            f,
-            str(1),
-            str(6),
-            "-outname", new_name,
-            "-outdir", ".",
-        ])
+print("Gathering", source_file)
+subprocess.run(["eos", "cp", os.path.join(data_dir, source_file), "."])
 
-        print("Uploading back", new_name)
-        subprocess.run(["eos", "cp", new_name, data_dir])
+new_name = re.sub("inverse_tracking", "REI", displacement_file)
 
-        print("Cleaning gathered files")
-        subprocess.run(["rm", f])
-        subprocess.run(["rm", source_name])
-        subprocess.run(["rm", new_name])
+print("Executing script...")
+subprocess.run([
+    "python",
+    "reversibility_to_REI.py",
+    source_file,
+    displacement_file,
+    str(1),
+    str(6),
+    "-outname", new_name,
+    "-outdir", ".",
+])
+
+print("Uploading back", new_name)
+subprocess.run(["eos", "cp", new_name, data_dir])
+
+print("Cleaning gathered files")
+subprocess.run(["rm", displacement_file])
+subprocess.run(["rm", source_file])
+subprocess.run(["rm", new_name])

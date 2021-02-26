@@ -11,4 +11,4 @@ export PATH=$MYPYTHON/bin:$PATH
 
 which python
 
-python3 execute_reversibility_to_REI.py
+python3 execute_reversibility_to_REI.py $1 $2 $3
