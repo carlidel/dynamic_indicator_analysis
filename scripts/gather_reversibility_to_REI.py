@@ -16,6 +16,6 @@ file_list = open("input_reversibility_to_REI.txt", 'w')
 
 for i, f in enumerate(data_file_list):
     if "inverse_tracking" in f:
-        source_name = re.sub('orto_displacement', 'init', f)
+        source_name = re.sub('inverse_tracking', 'init', f)
         source_name = re.sub(r"_subid_.*\.", ".", source_name)
         file_list.write(data_dir + " " + source_name + " " + f + "\n")
