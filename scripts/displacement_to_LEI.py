@@ -3,7 +3,7 @@ import h5py
 import argparse
 import os
 import re
-
+from tqdm import tqdm 
 
 def faddeev_leverrier(m, grade=1):
     assert grade > 0
@@ -71,7 +71,7 @@ out = h5py.File(out_file, mode='w')
 out.attrs["inputfile"] = os.path.basename(input_file)
 
 turns = list(d)
-for t in turns:
+for t in tqdm(turns):
     t11 = d[t]["x"][1] - d[t]["x"][0]
     t12 = d[t]["px"][1] - d[t]["px"][0]
     t13 = d[t]["y"][1] - d[t]["y"][0]
@@ -101,7 +101,7 @@ for t in turns:
     tmt = np.transpose(tm, axes=(0, 1, 3, 2))
     tmttm = np.matmul(tmt, tm)
 
-    for i in range(min_order, max_order + 1):
+    for i in tqdm(range(min_order, max_order + 1)):
         data = v_faddeev_leverrier(tmttm, [i])[:, :, 0]
         out.create_dataset(
             t + "/" + str(i),
