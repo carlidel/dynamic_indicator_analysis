@@ -263,8 +263,8 @@ for i in tqdm(range(0, (max_turns//tau)+5)):
         matrix4, matrix3, matrix2, source.attrs["total_samples"])
     
     gali4 = np.amin([gali4, gali4_n], axis=0)
-    gali3 = np.amin([gali3, gali2_n], axis=0)
-    gali2 = np.amin([gali3, gali2_n], axis=0)
+    gali3 = np.amin([gali3, gali3_n], axis=0)
+    gali2 = np.amin([gali2, gali2_n], axis=0)
 
     while i * tau > (turn_list[counter] if counter < len(turn_list) else np.inf):
         dest.create_dataset(
@@ -273,11 +273,11 @@ for i in tqdm(range(0, (max_turns//tau)+5)):
         )
         dest.create_dataset(
             "gali3/{}".format(turn_list[counter]),
-            data=gali4.reshape((side_cond, side_cond))
+            data=gali3.reshape((side_cond, side_cond))
         )
         dest.create_dataset(
             "gali2/{}".format(turn_list[counter]),
-            data=gali4.reshape((side_cond, side_cond))
+            data=gali2.reshape((side_cond, side_cond))
         )
         counter += 1
 
