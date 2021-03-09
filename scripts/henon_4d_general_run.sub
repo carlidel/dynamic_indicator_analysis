@@ -10,7 +10,7 @@ transfer_input_files    = ./henon_4d/henon_4d_gen_initial_condition.py, ./henon_
 
 when_to_transfer_output = ON_EXIT
 
-+JobFlavour = "longlunch"
++JobFlavour = "espresso"
 
 request_GPUs = 1
 request_CPUs = 1

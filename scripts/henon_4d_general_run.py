@@ -5,6 +5,22 @@ import time
 from tqdm import tqdm
 import argparse
 
+EXECUTING_LIST = {
+    "long_tracking": False,
+    "long_tracking_wk": False,
+    "long_tracking_wk_bis": False,
+    "long_tracking_wk_ter": False,
+    "single_displacement": False,
+    "orthonormal_displacement": False,
+    "pure_inverse_tracking": False,
+    "uniform_noisy_tracking": False,
+    "gaussian_noisy_tracking": False,
+    "uniform_noisy_tracking_fo": False,
+    "gaussian_noisy_tracking_fo": False,
+    "sali": False,
+    "gali": True,
+}
+
 """GALI AND FFT ARE INCLUDED BUT COMMENTED, BECAUSE THEY TAKE MUCH MUCH MORE TIME!!!"""
 
 def print_elapsed_time(start, end):
@@ -173,286 +189,308 @@ print_elapsed_time(start, end)
 print("Total elapsed time so far:")
 print_elapsed_time(start_0, end)
 print("------------------")
-start = time.time()
 
 inputfile = os.path.join(
     outdir,
     "henon_4d_init_eps_{:.2}_mu_{:.2}_id_{}".format(
         epsilon, mu, id_main).replace(".", "_") + ".hdf5")
 
-print("Long Tracking")
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_long_track.py"),
-    inputfile,
-    str(max_turns_long_run),
-    "-o",
-    outdir
-])
+if EXECUTING_LIST["long_tracking"]:
+    start = time.time()
+    print("Long Tracking")
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_long_track.py"),
+        inputfile,
+        str(max_turns_long_run),
+        "-o",
+        outdir
+    ])
 
-print("Long Tracking (with kicks)")
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
-    inputfile,
-    str(max_turns_long_run),
-    str(1e-4),
-    "1e-4",
-    "-o",
-    outdir
-])
+if EXECUTING_LIST["long_tracking_wk"]:
+    start = time.time()
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
+    print("Long Tracking (with kicks)")
 
-print("Long Tracking (with kicks) bis")
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
+        inputfile,
+        str(max_turns_long_run),
+        str(1e-4),
+        "1e-4",
+        "-o",
+        outdir
+    ])
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
-    inputfile,
-    str(max_turns_long_run),
-    str(1e-8),
-    "1e-8",
-    "-o",
-    outdir
-])
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
 
+if EXECUTING_LIST["long_tracking_wk_bis"]:
+    start = time.time()
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
+    print("Long Tracking (with kicks) bis")
 
-print("Long Tracking (with kicks) ter")
-
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
-    inputfile,
-    str(max_turns_long_run),
-    str(1e-12),
-    "1e-12",
-    "-o",
-    outdir
-])
-
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
-
-print("Single displacement")
-
-id_secondary = "{:.0e}".format(displacement)
-
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_track_displacement.py"),
-    inputfile,
-    str(min_turns),
-    str(max_turns),
-    str(turn_samples),
-    str(displacement),
-    id_secondary,
-    "-o",
-    outdir
-])
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
+        inputfile,
+        str(max_turns_long_run),
+        str(1e-8),
+        "1e-8",
+        "-o",
+        outdir
+    ])
 
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
 
-print("Orthonormal displacement")
+if EXECUTING_LIST["long_tracking_wk_ter"]:
+    start = time.time()
 
-id_secondary = "{:.0e}".format(displacement)
+    print("Long Tracking (with kicks) ter")
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_track_orto_displacement.py"),
-    inputfile,
-    str(min_turns),
-    str(max_turns),
-    str(turn_samples),
-    str(displacement),
-    id_secondary,
-    "-o",
-    outdir
-])
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_long_track_wkick.py"),
+        inputfile,
+        str(max_turns_long_run),
+        str(1e-12),
+        "1e-12",
+        "-o",
+        outdir
+    ])
+
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
+
+if EXECUTING_LIST["single_displacement"]:
+    start = time.time()
+
+    print("Single displacement")
+
+    id_secondary = "{:.0e}".format(displacement)
+
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_track_displacement.py"),
+        inputfile,
+        str(min_turns),
+        str(max_turns),
+        str(turn_samples),
+        str(displacement),
+        id_secondary,
+        "-o",
+        outdir
+    ])
 
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
 
-print("Pure Inverse Tracking")
+if EXECUTING_LIST["orthonormal_displacement"]:
+    start = time.time()
 
-id_secondary = "no_kick"
+    print("Orthonormal displacement")
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-    inputfile,
-    str(min_turns),
-    str(max_turns),
-    str(turn_samples),
-    "false",
-    "false",
-    str(displacement),
-    str(0.0),
-    id_secondary,
-    "-o",
-    outdir
-])
+    id_secondary = "{:.0e}".format(displacement)
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_track_orto_displacement.py"),
+        inputfile,
+        str(min_turns),
+        str(max_turns),
+        str(turn_samples),
+        str(displacement),
+        id_secondary,
+        "-o",
+        outdir
+    ])
 
-print("Uniform Noisy Tracking")
 
-id_secondary = "unif_kick"
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-    inputfile,
-    str(min_turns),
-    str(max_turns),
-    str(turn_samples),
-    "true",
-    "true",
-    str(kick_magnitude),
-    str(0.0),
-    id_secondary,
-    "-o",
-    outdir
-])
+if EXECUTING_LIST["pure_inverse_tracking"]:
+    start = time.time()
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
+    print("Pure Inverse Tracking")
 
-print("Gaussian Noisy Tracking")
+    id_secondary = "no_kick"
 
-id_secondary = "gauss_kick"
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
+        inputfile,
+        str(min_turns),
+        str(max_turns),
+        str(turn_samples),
+        "false",
+        "false",
+        str(displacement),
+        str(0.0),
+        id_secondary,
+        "-o",
+        outdir
+    ])
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-    inputfile,
-    str(min_turns),
-    str(max_turns),
-    str(turn_samples),
-    "true",
-    "true",
-    str(kick_magnitude),
-    str(kick_sigma),
-    id_secondary,
-    "-o",
-    outdir
-])
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
+if EXECUTING_LIST["uniform_noisy_tracking"]:
+    start = time.time()
 
-print("Uniform Noisy Tracking (forward only)")
+    print("Uniform Noisy Tracking")
 
-id_secondary = "unif_kick_forward"
+    id_secondary = "unif_kick"
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-    inputfile,
-    str(min_turns),
-    str(max_turns),
-    str(turn_samples),
-    "true",
-    "false",
-    str(kick_magnitude),
-    str(0.0),
-    id_secondary,
-    "-o",
-    outdir
-])
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
+        inputfile,
+        str(min_turns),
+        str(max_turns),
+        str(turn_samples),
+        "true",
+        "true",
+        str(kick_magnitude),
+        str(0.0),
+        id_secondary,
+        "-o",
+        outdir
+    ])
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
 
-print("Gaussian Noisy Tracking (forward only)")
+if EXECUTING_LIST["gaussian_noisy_tracking"]:
+    start = time.time()
 
-id_secondary = "gauss_kick_forward"
+    print("Gaussian Noisy Tracking")
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
-    inputfile,
-    str(min_turns),
-    str(max_turns),
-    str(turn_samples),
-    "true",
-    "false",
-    str(kick_magnitude),
-    str(kick_sigma),
-    id_secondary,
-    "-o",
-    outdir
-])
+    id_secondary = "gauss_kick"
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
+        inputfile,
+        str(min_turns),
+        str(max_turns),
+        str(turn_samples),
+        "true",
+        "true",
+        str(kick_magnitude),
+        str(kick_sigma),
+        id_secondary,
+        "-o",
+        outdir
+    ])
+
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
+
+if EXECUTING_LIST["uniform_noisy_tracking_fo"]:
+    start = time.time()
+
+    print("Uniform Noisy Tracking (forward only)")
+
+    id_secondary = "unif_kick_forward"
+
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
+        inputfile,
+        str(min_turns),
+        str(max_turns),
+        str(turn_samples),
+        "true",
+        "false",
+        str(kick_magnitude),
+        str(0.0),
+        id_secondary,
+        "-o",
+        outdir
+    ])
+
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
+
+if EXECUTING_LIST["gaussian_noisy_tracking_fo"]:
+    start = time.time()
+
+    print("Gaussian Noisy Tracking (forward only)")
+
+    id_secondary = "gauss_kick_forward"
+
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_inverse_tracking.py"),
+        inputfile,
+        str(min_turns),
+        str(max_turns),
+        str(turn_samples),
+        "true",
+        "false",
+        str(kick_magnitude),
+        str(kick_sigma),
+        id_secondary,
+        "-o",
+        outdir
+    ])
+
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
 
 # start = time.time()
 # print("Megno")
@@ -476,58 +514,61 @@ print("------------------")
 # print_elapsed_time(start_0, end)
 # print("------------------")
 
-start = time.time()
+if EXECUTING_LIST["sali"]:
+    start = time.time()
 
-print("Sali")
+    print("Sali")
 
-id_secondary = "{:.0e}".format(displacement)
+    id_secondary = "{:.0e}".format(displacement)
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_sali.py"),
-    inputfile,
-    str(min_turns),
-    str(max_turns),
-    str(turn_samples),
-    str(displacement),
-    str(tau),
-    id_secondary,
-    "-o",
-    outdir
-])
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_sali.py"),
+        inputfile,
+        str(min_turns),
+        str(max_turns),
+        str(turn_samples),
+        str(displacement),
+        str(tau),
+        id_secondary,
+        "-o",
+        outdir
+    ])
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
-start = time.time()
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
 
-print("Gali")
+if EXECUTING_LIST["gali"]:
+    start = time.time()
 
-id_secondary = "{:.0e}".format(displacement)
+    print("Gali")
 
-subprocess.run([
-    "python",
-    os.path.join(scriptdir, "henon_4d_gali.py"),
-    inputfile,
-    str(min_turns),
-    str(max_turns),
-    str(turn_samples),
-    str(displacement),
-    str(tau),
-    id_secondary,
-    "-o",
-    outdir
-])
+    id_secondary = "{:.0e}".format(displacement)
 
-end = time.time()
-print("Elapsed time:")
-print_elapsed_time(start, end)
-print("Total elapsed time so far:")
-print_elapsed_time(start_0, end)
-print("------------------")
+    subprocess.run([
+        "python",
+        os.path.join(scriptdir, "henon_4d_gali.py"),
+        inputfile,
+        str(min_turns),
+        str(max_turns),
+        str(turn_samples),
+        str(displacement),
+        str(tau),
+        id_secondary,
+        "-o",
+        outdir
+    ])
+
+    end = time.time()
+    print("Elapsed time:")
+    print_elapsed_time(start, end)
+    print("Total elapsed time so far:")
+    print_elapsed_time(start_0, end)
+    print("------------------")
 
 # start = time.time()
 # print("FFT computation")
