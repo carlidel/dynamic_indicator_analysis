@@ -122,7 +122,7 @@ for i in tqdm(range(0, total_cond, N_CORES)):
     x, px, y, py = engine.compute(max_turns, epsilon, mu, full_track=True)
     
     for j in range(min_power, max_power + 1):
-        steps = 2 ** (max_power - j)
+        steps = 2
         tune_x = dest.require_dataset(
             "/{}/tune_x".format(j),
             dtype=np.float64,

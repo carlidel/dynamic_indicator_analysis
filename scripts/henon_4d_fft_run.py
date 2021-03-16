@@ -143,7 +143,7 @@ subprocess.run([
     str(fft_min_power),
     str(fft_max_power),
     "-ncores",
-    str(2048),
+    str(512),
     "-o",
     outdir
 ])

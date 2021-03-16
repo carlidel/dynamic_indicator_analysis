@@ -10,8 +10,8 @@ transfer_input_files    = ./henon_4d/henon_4d_gen_initial_condition.py, ./henon_
 
 when_to_transfer_output = ON_EXIT
 
-+JobFlavour = "workday"
++JobFlavour = "tomorrow"
 
-request_CPUs = 4
+request_CPUs = 16
 
 queue arguments from eps_mu_list.txt
