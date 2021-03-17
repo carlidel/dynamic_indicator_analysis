@@ -1,0 +1,119 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{physics}
+
+\mathtoolsset{showonlyrefs,showmanualtags}
+
+\usepackage{graphicx}
+\graphicspath{{../fig2}} %Setting the graphicspath
+\usepackage{subfig}
+\usepackage{wrapfig}
+\usepackage{sidecap}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+%%%%%% TESTO EFFETTIVO
+
+\title{Algorithms used for computing the Dynamic Indicators}
+\author{Carlo Emilio Montanari}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    In this short report, I will briefly present the various algorithms I implemented in the general Dynamic Indicator analysis. I will focus exclusively on the raw implementation, without any theoretical consideration.
+\end{abstract}
+
+\section{General notation}
+
+I will use the following notation:
+
+\begin{itemize}
+    \item $\vb{x}_0$ is a generic 4D initial condition $(x_0, p_{x0}, y, p_{y0})$.
+    \item $M^t(\vb{x})$ is the vector after the execution of $t$ map turns.
+\end{itemize}
+
+
+\section{Fast Lyapunov Indicator $(LI)$}
+
+Let $\vb{x}_0$ be a generic 4D initial condition and $\vb{x}'_0 = \vb{x}_0 + \epsilon \vb{\eta}$, where $\epsilon$ is the magnitude of the displacement and $\eta$ a random unitary vector in the 4D space.
+
+Iterate $\vb{x}_0$ and $\vb{x}'_0$ for $n$ iterations.
+
+Finally:
+\begin{equation}
+LI_n(\vb{x}_0) = \frac{\log_{10} \left(\frac{(M^n(\vb{x}_0)-M^n(\vb{x}'_0))^2}{\epsilon}\right)}{n}
+\end{equation}
+
+\section{Invariant Lyapunov Error (LEI)}
+
+Let $\vb{x}_0$ be a generic 4D initial condition and let's consider next 4 different displacements:
+\begin{enumerate}
+    \item $\vb{x}_1 = \vb{x} + \epsilon \vb{e}_0$
+    \item $\vb{x}_2 = \vb{x} + \epsilon \vb{e}_1$
+    \item $\vb{x}_3 = \vb{x} + \epsilon \vb{e}_2$
+    \item $\vb{x}_4 = \vb{x} + \epsilon \vb{e}_3$
+\end{enumerate}
+Iterate these 5 initial conditions for $n$ turns.
+
+Build then the following approximated tangent matrix:
+\begin{equation}
+    L = \begin{pmatrix}
+        M^n(\vb{x}_1)_x - M^n(\vb{x}_0)_x & M^n(\vb{x}_1)_{px} - M^n(\vb{x}_0)_{px} &
+        M^n(\vb{x}_1)_y - M^n(\vb{x}_0)_y & M^n(\vb{x}_1)_{py} - M^n(\vb{x}_0)_{py} \\
+        M^n(\vb{x}_2)_x - M^n(\vb{x}_0)_x & M^n(\vb{x}_2)_{px} - M^n(\vb{x}_0)_{px} &
+        M^n(\vb{x}_2)_y - M^n(\vb{x}_0)_y & M^n(\vb{x}_2)_{py} - M^n(\vb{x}_0)_{py} \\
+        M^n(\vb{x}_3)_x - M^n(\vb{x}_0)_x & M^n(\vb{x}_3)_{px} - M^n(\vb{x}_0)_{px} &
+        M^n(\vb{x}_3)_y - M^n(\vb{x}_0)_y & M^n(\vb{x}_3)_{py} - M^n(\vb{x}_0)_{py} \\
+        M^n(\vb{x}_4)_x - M^n(\vb{x}_0)_x & M^n(\vb{x}_4)_{px} - M^n(\vb{x}_0)_{px} &
+        M^n(\vb{x}_4)_y - M^n(\vb{x}_0)_y & M^n(\vb{x}_4)_{py} - M^n(\vb{x}_0)_{py} \\ 
+    \end{pmatrix}
+\end{equation}
+
+Compute $\Sigma^2 = L^TL$
+
+We have in the end:
+\begin{equation}
+    LEI_n(\vb{x}) = \Tr(\Sigma^2)
+\end{equation}
+
+We might be interested higher invariants of the Lyapunov error. To do so, we can use the Faddeev Leverrier recurrence
+
+\begin{align}
+    B_1 &= A \qquad &p_1 &= \Tr(B_1) \\
+    B_2 &= A(B_1 - p_1 I) \qquad &p_2 &= \frac{1}{2} \Tr(B_2) \\
+    \vdots\\
+    B_k &= A(B_{k-1} - p_{k-1} I) \qquad &p_k &= \frac{1}{k} \Tr(B_k) \\
+\end{align}
+(we notice that $\Tr(\Sigma^2)$ is in fact $p_1$).
+
+And we can finally consider:
+\begin{equation}
+    LEI^k_n(\vb{x}) = (-1)^{k+1} p_k \qquad A=\Sigma^2_Ln = L^TL
+\end{equation}
+
+\section{Reversibility Error (RE)}
+
+\section{Invariant Reversibility Error (REI)}
+
+\section{SALI}
+
+\section{GALI}
+
+\section{MEGNO}
+
+\section{Frequency Map}
+
+\end{document}
