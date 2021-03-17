@@ -86,7 +86,7 @@ Compute $\Sigma^2 = L^TL$
 
 We have in the end:
 \begin{equation}
-    LEI_n(\vb{x}) = \Tr(\Sigma^2)
+    LEI_n(\vb{x_0}) = \Tr(\Sigma^2)
 \end{equation}
 
 We might be interested higher invariants of the Lyapunov error. To do so, we can use the Faddeev Leverrier recurrence
@@ -101,12 +101,27 @@ We might be interested higher invariants of the Lyapunov error. To do so, we can
 
 And we can finally consider:
 \begin{equation}
-    LEI^k_n(\vb{x}) = (-1)^{k+1} p_k \qquad A=\Sigma^2_Ln = L^TL
+    LEI^k_n(\vb{x_0}) = (-1)^{k+1} p_k \qquad A=\Sigma^2_Ln = L^TL
 \end{equation}
 
 \section{Reversibility Error (RE)}
 
+Given $\vb{x_0}$, we define the following
+
+\begin{equation}
+    RE_n(\vb{x}_0) = (M^{-1})^n(M^{n}(\vb{x}_x))
+\end{equation}
+
+An arbitrary random kick of given average and standard deviation can be considered for each and every map step, or only part of the steps (e.g.\ kick the particles only in the forward tracking).
+
 \section{Invariant Reversibility Error (REI)}
+
+We consider the initial condition $\vb{x}_0$, and we execute the same forward-backward tracking we did for RE. We end up with a displaced vector $\vb{x}_1$.
+
+We then compose the covariance matrix
+\begin{equation}
+    
+\end{equation} 
 
 \section{SALI}
 
